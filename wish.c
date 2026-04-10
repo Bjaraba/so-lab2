@@ -9,7 +9,7 @@ char *path = "/bin";
 
 void print_arr(char **arr);
 void handle_input(char *input);
-void handle_extern_commands(char *command, char **args);
+void handle_extern_commands(char **args);
 void extern_command(char *command, char **args);
 
 int main(int argc, char const *argv[])
@@ -50,7 +50,6 @@ void handle_input(char *input)
   char path[256];
   strcpy(path, "/bin/");
 
-  char *command = NULL;
   char **args = NULL;
   char *item;
   int i = 0;
@@ -61,44 +60,39 @@ void handle_input(char *input)
     {
       continue; // avoid void words
     }
-    if (i == 0)
-    {
-      command = malloc(strlen(item) + 1);
-      strcpy(command, item); // first word is the command
-      i++;
-      continue;
-    }
-    args = realloc(args, (i + 1) * sizeof(char *));
-    args[i - 1] = malloc(strlen(item) + 1);
-    strcpy(args[i - 1], item);
-    args[i] = NULL;
+    args = realloc(args, (i + 2) * sizeof(char *));
+    args[i] = malloc(strlen(item) + 1);
+    strcpy(args[i], item);
+    args[i + 1] = NULL;
     i++;
   }
 
-  if (command == NULL)
+  if (args == NULL || args[0] == NULL)
   {
-    printf("comando no disponible");
+    char error_message[30] = "command not found\n";
+    write(STDERR_FILENO, error_message, strlen(error_message));
   }
   else
   {
-    printf("commando: %s\n", command);
-    strcat(path, command);
+    strcat(path, args[0]);
     int available = access(path, X_OK);
     if (available == -1)
     {
-      printf("el comando no esta disponible\n");
+      char error_message[30] = "command not found\n";
+      write(STDERR_FILENO, error_message, strlen(error_message));
     }
     else
     {
-      handle_extern_commands(command, args);
+      // Replace args[0] with the full path for execv
+      free(args[0]);
+      args[0] = malloc(strlen(path) + 1);
+      strcpy(args[0], path);
+      
+      handle_extern_commands(args);
     }
   }
 
   // Free memory
-  if (command != NULL)
-  {
-    free(command);
-  }
   if (args != NULL)
   {
     for (int j = 0; args[j] != NULL; j++)
@@ -110,15 +104,23 @@ void handle_input(char *input)
   free(input_copy);
 }
 
-void handle_extern_commands(char *command, char **args)
+void handle_extern_commands(char **args)
 {
   int pid = fork();
   if (pid < 0)
   {
-    printf("ha ocurrido un error\n");
+    printf("pid negative\n");
+    char error_message[30] = "An error has ocurred\n";
+    write(STDERR_FILENO, error_message, strlen(error_message));
   }
   else if (pid == 0)
   {
+    if (execv(args[0], args) == -1)
+    {
+      printf("execv error\n");
+      char error_message[30] = "An error has ocurred\n";
+      write(STDERR_FILENO, error_message, strlen(error_message));
+    }
   }
   else
   {
