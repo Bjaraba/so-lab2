@@ -12,7 +12,7 @@
 
   1032178608
 
-**Funciones implementadas en el shell wish, explicando su propósito y funcionamiento dentro del programa**
+**Funciones implementadas en el shell wish:
 
 ```
 print_error()
