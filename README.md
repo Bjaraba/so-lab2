@@ -233,3 +233,4 @@ An error has occurred
 ./wish archivo.txt
 
 Resultado esperado:
+El shell ejecuta los comandos del archivo sin mostrar prompt.
