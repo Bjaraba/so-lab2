@@ -115,6 +115,10 @@ Dentro de esta función se realiza lo siguiente:
 
 Este proceso se repite continuamente hasta que el usuario ejecuta el comando exit, momento en el cual el shell termina su ejecución.
 
+
+El shell ejecuta los comandos del archivo sin mostrar prompt.
+
+
 **Problemas presentados durante el desarrollo y sus soluciones**
 
 **-Problema 1: Comandos no se ejecutaban correctamente**
@@ -165,3 +169,66 @@ Cuando el usuario eliminaba todas las rutas con path, el shell no manejaba corre
 Solución:
 Se agregó una validación en execute_command() para imprimir error si no existen rutas definidas.
 
+**Pruebas realizadas para verificar la funcionalidad**
+
+**1. Ejecución de comandos básicos**
+
+Se probó la ejecución de comandos del sistema como:
+
+wish> ls
+
+wish> pwd
+
+Resultado esperado:
+Los comandos se ejecutan correctamente mostrando la salida en pantalla.
+
+
+**2. Cambio de directorio (cd)**
+
+wish> cd /
+
+wish> cd /home
+
+Resultado esperado:
+El directorio actual cambia correctamente sin errores.
+
+**3. Manejo del PATH¨**
+wish> path /bin
+
+wish> ls
+
+Resultado esperado:
+El shell encuentra y ejecuta correctamente los comandos en /bin.
+
+**4. Redirección de salida (>)**
+
+wish> ls > salida.txt
+
+Resultado esperado:
+Se crea el archivo salida.txt con la salida del comando y no se imprime en pantalla.
+
+**5. Ejecución de comandos en paralelo (&)**
+
+wish> ls & pwd
+
+Resultado esperado:
+Ambos comandos se ejecutan al mismo tiempo y luego el shell espera su finalización.
+
+**6. Manejo de errores**
+
+wish> comando_invalido
+
+wish> cd
+
+wish> path
+
+Resultado esperado:
+En todos los casos se imprime el mensaje:
+
+An error has occurred
+
+**7. Ejecución en modo batch**
+
+./wish archivo.txt
+
+Resultado esperado:
