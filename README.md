@@ -41,8 +41,9 @@ Esta función se encarga de manejar el comando path, que define en qué rutas el
 
 Lo que hace es:
 
-Eliminar las rutas que ya estaban guardadas
-Guardar las nuevas rutas ingresadas por el usuario
+-Eliminar las rutas que ya estaban guardadas
+
+-Guardar las nuevas rutas ingresadas por el usuario
 
 Si el usuario no define ninguna ruta, el shell no podrá ejecutar comandos externos.
 
@@ -71,16 +72,22 @@ Esta función se encarga de detectar y procesar la redirección de salida usando
 
 Lo que hace es:
 
-Verificar si existe el símbolo >
-Validar que solo haya una redirección
-Separar el comando del nombre del archivo
-Comprobar que el formato sea correcto
+-Verificar si existe el símbolo >
+
+-Validar que solo haya una redirección
+
+-Separar el comando del nombre del archivo
+
+-Comprobar que el formato sea correcto
 
 Retorna:
 
-0 si no hay redirección
-1 si la redirección es válida
--1 si hay un error en la sintaxis
+- 0 si no hay redirección
+
+- 1 si la redirección es válida
+
+
+- -1 si hay un error en la sintaxis
 
 ```
  main(int argc, char *argv[])
@@ -90,13 +97,20 @@ Esta es la función principal del programa y donde se controla todo el funcionam
 
 Dentro de esta función se realiza lo siguiente:
 
-Se inicializa la ruta por defecto (/bin)
-Se determina si el programa se ejecuta en modo interactivo o batch
-Se lee la entrada del usuario usando getline()
-Se separan comandos paralelos con el operador &
-Se procesa la redirección de salida
-Se identifican y ejecutan los comandos integrados (cd, path, exit)
-Se crean procesos hijos con fork() para ejecutar comandos externos
-Se espera la finalización de los procesos con waitpid()
+-Se inicializa la ruta por defecto (/bin)
+
+-Se determina si el programa se ejecuta en modo interactivo o batch
+
+-Se lee la entrada del usuario usando getline()
+
+-Se separan comandos paralelos con el operador &
+
+-Se procesa la redirección de salida
+
+-Se identifican y ejecutan los comandos integrados (cd, path, exit)
+
+-Se crean procesos hijos con fork() para ejecutar comandos externos
+
+-Se espera la finalización de los procesos con waitpid()
 
 Este proceso se repite continuamente hasta que el usuario ejecuta el comando exit, momento en el cual el shell termina su ejecución.
