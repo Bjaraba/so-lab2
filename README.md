@@ -192,7 +192,8 @@ wish> cd /home
 Resultado esperado:
 El directorio actual cambia correctamente sin errores.
 
-**3. Manejo del PATH¨**
+**3. Manejo del PATH**
+
 wish> path /bin
 
 wish> ls
