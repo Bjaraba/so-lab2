@@ -22,7 +22,7 @@ Esta función se utiliza cada vez que ocurre algún error en el shell. Su objeti
 
 El mensaje que imprime es:
 
-#An error has occurred
+**An error has occurred**
 
 Se llama en diferentes partes del programa para asegurar que todos los errores se manejen de forma uniforme.
 
