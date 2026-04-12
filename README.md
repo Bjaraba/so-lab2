@@ -114,3 +114,54 @@ Dentro de esta función se realiza lo siguiente:
 -Se espera la finalización de los procesos con waitpid()
 
 Este proceso se repite continuamente hasta que el usuario ejecuta el comando exit, momento en el cual el shell termina su ejecución.
+
+**Problemas presentados durante el desarrollo y sus soluciones**
+
+**-Problema 1: Comandos no se ejecutaban correctamente**
+
+Al inicio, algunos comandos como ls no se ejecutaban o no mostraban salida.
+
+Solución:
+Se revisó la función execute_command() y se corrigió la forma en la que se construía la ruta del ejecutable usando paths y access(). Esto permitió ubicar correctamente los programas en /bin.
+
+**-Problema 2: Errores con espacios en los comandos**
+
+El shell fallaba cuando el usuario ingresaba múltiples espacios o tabs antes del comando.
+
+Solución:
+Se agregaron validaciones para limpiar espacios en blanco usando punteros y se mejoró el parsing con strsep().
+
+**-Problema 3: Redirección (>) no funcionaba correctamente**
+
+En algunos casos la redirección no creaba el archivo o generaba errores de sintaxis.
+
+Solución:
+Se mejoró la función handle_redirection() para:
+
+validar que solo exista un >
+
+limpiar correctamente el nombre del archivo
+
+evitar múltiples archivos o símbolos inválidos
+
+**-Problema 4: Salida no se escribía en archivos**
+
+Aunque la redirección estaba detectada, la salida no se guardaba correctamente.
+
+Solución:
+Se utilizó dup2() para redirigir tanto STDOUT como STDERR al archivo antes de ejecutar el comando.
+
+**-Problema 5: Comandos en paralelo (&) no esperaban correctamente**
+
+Al ejecutar varios comandos con &, el shell no siempre esperaba a todos los procesos.
+
+Solución:
+Se implementó el uso de fork() para cada comando y waitpid() para asegurar que el proceso principal espere a todos los hijos.
+
+**-Problema 6: Manejo del PATH vacío**
+
+Cuando el usuario eliminaba todas las rutas con path, el shell no manejaba correctamente los errores.
+
+Solución:
+Se agregó una validación en execute_command() para imprimir error si no existen rutas definidas.
+
